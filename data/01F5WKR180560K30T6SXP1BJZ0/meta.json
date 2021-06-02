@@ -1,0 +1,17 @@
+{
+	"ulid": "01F5WKR180560K30T6SXP1BJZ0",
+	"minTime": 1621225839457,
+	"maxTime": 1621231200000,
+	"stats": {
+		"numSamples": 175768,
+		"numSeries": 9067,
+		"numChunks": 9067
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01F5WKR180560K30T6SXP1BJZ0"
+		]
+	},
+	"version": 1
+}

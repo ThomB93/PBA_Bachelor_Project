@@ -1,0 +1,94 @@
+groups:
+- name: AllInstances
+  rules:
+  - alert: InstanceDown
+    # Condition for alerting
+    expr: up == 0
+    for: 1m
+    # Annotation - additional informational labels to store more information
+    annotations:
+      title: 'Instance {{ $labels.instance }} down'
+      description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute.'
+    # Labels - additional labels to be attached to the alert
+    labels:
+      severity: 'critical'
+  - alert: PrometheusNotConnectedToAlertmanager
+    expr: prometheus_notifications_alertmanagers_discovered < 1
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: Prometheus not connected to alertmanager (instance {{ $labels.instance }})
+      description: "Prometheus cannot connect the alertmanager\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: PrometheusRuleEvaluationFailures
+    expr: increase(prometheus_rule_evaluation_failures_total[3m]) > 0
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: Prometheus rule evaluation failures (instance {{ $labels.instance }})
+      description: "Prometheus encountered {{ $value }} rule evaluation failures, leading to potentially ignored alerts.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: HostUnusualDiskReadRate
+    expr: sum by (instance) (rate(windows_logical_disk_read_bytes_total[2m])) / 1024 / 1024 > 50
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: Host unusual disk read rate (instance {{ $labels.instance }})
+      description: "Disk is probably reading too much data (> 50 MB/s)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+  - alert: AsyncWorkerDown
+    expr: ihs_AsyncWorker_Status == 4
+    for: 1m
+    annotations:
+      title: 'Async Worker down'
+      description: 'The Async Worker has been down for more than 1 minute.'
+    labels:
+      severity: 'critical'
+  - alert: AsyncWorkerSlowProcessWorkItemDuration
+    expr: ihs_async_worker_process_work_item_duration_seconds{quantile="0.99"} > 2.0
+    for: 30s
+    annotations:
+      title: 'Async Worker ProcessWorkDuration Operation Slow'
+      description: 'The Async Worker ProcessWorkOperation has been running for > 2 seconds.'
+    labels:
+      severity: 'warning'
+  - alert: AsyncWorkerProcessWorkItemsHighErrorRate
+    expr: rate(ihs_async_worker_errors_total{method="ProessWorkItems"}[30m]) > 0.01
+    for: 1m
+    annotations:
+      title: 'Async Worker ProcessWorkItems High Error Rate'
+      description: 'The ProcessWorkItems operation in the AsyncWorker has experienced a high number of error in the last 30 minutes.'
+    labels:
+      severity: 'error'
+  - alert: BillRunServiceHighErrorRate
+    expr: rate(ihs_bill_run_service_errors_total[30m]) > 0.01
+    for: 1m
+    annotations:
+      title: 'BillRun Service High Error Rate'
+      description: 'The BillRun Service has experienced a high number of error in the last 30 minutes.'
+    labels:
+      severity: 'error'
+  - alert: InvoiceHandlingServiceHighErrorRate
+    expr: rate(ihs_invoice_handling_service_errors_total[30m]) > 0.01
+    for: 1m
+    annotations:
+      title: 'InvoiceHandling Service High Error Rate'
+      description: 'The InvoiceHandling Service has experienced a high number of error in the last 30 minutes.'
+    labels:
+      severity: 'error'
+  - alert: GetInvoiceHighAvgDuration
+    expr: sum(rate(ihs_invoice_handling_service_operation_durations_count[10m])) / sum(rate(ihs_invoice_handling_service_operation_durations_sum[10m])) > 10.0
+    for: 1m
+    annotations:
+      title: 'GetInvoice High Average Duration'
+      description: 'The GetInvoice method in the InvoiceHandling Service has an average duration of 10 seconds.'
+    labels:
+      severity: 'warning'
+  - alert: AsyncWorkerHighNumberOfExceptions
+    expr: sum(increase(ihs_async_worker_errors_total[24h])) > 30
+    for: 1m
+    annotations:
+      title: 'Async Worker High Number of Exceptions'
+      description: 'The Async Worker has encountered a high number of exceptions in the last 24 hours.'
+    labels:
+      severity: 'error'

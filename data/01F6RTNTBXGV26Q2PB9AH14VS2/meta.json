@@ -1,0 +1,17 @@
+{
+	"ulid": "01F6RTNTBXGV26Q2PB9AH14VS2",
+	"minTime": 1622102401102,
+	"maxTime": 1622109600000,
+	"stats": {
+		"numSamples": 4440154,
+		"numSeries": 9511,
+		"numChunks": 37865
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01F6RTNTBXGV26Q2PB9AH14VS2"
+		]
+	},
+	"version": 1
+}

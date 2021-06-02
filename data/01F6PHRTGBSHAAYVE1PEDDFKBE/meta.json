@@ -1,0 +1,17 @@
+{
+	"ulid": "01F6PHRTGBSHAAYVE1PEDDFKBE",
+	"minTime": 1622096190942,
+	"maxTime": 1622102400000,
+	"stats": {
+		"numSamples": 3818381,
+		"numSeries": 9392,
+		"numChunks": 27870
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01F6PHRTGBSHAAYVE1PEDDFKBE"
+		]
+	},
+	"version": 1
+}
